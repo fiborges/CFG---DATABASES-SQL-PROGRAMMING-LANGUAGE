@@ -1,7 +1,7 @@
 ## 1. Create a table:
 Let's create a table called Books that contains information about books, such as title, author, and publication year.
-```
-sql
+
+```sql
 
 CREATE TABLE Books (
     BookID INT PRIMARY KEY,
