@@ -57,3 +57,76 @@ FROM Books
 JOIN Authors ON Books.Author = Authors.AuthorName;
 ```
 Here, we are selecting the book titles and author names from the Books and Authors tables, respectively, combining the rows where the author's name is the same in both tables.
+
+
+---------------------------------------------------------------
+## New Topic
+In an RDBMS, data is organized and stored in tables, and these tables are related to each other. Relationships between tables are established through keys, typically primary keys and foreign keys.
+
+### Example: Online Bookstore Database
+
+Consider an online bookstore with two main entities: Books and Authors. We'll create a simple relational database to manage this information.
+
+#### 1. Create Tables:
+
+```sql
+
+-- Books table
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    AuthorID INT,
+    Price DECIMAL(8,2),
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+);
+
+-- Authors table
+CREATE TABLE Authors (
+    AuthorID INT PRIMARY KEY,
+    AuthorName VARCHAR(50)
+);
+```
+Here, we have two tables: Books and Authors. The Books table has a foreign key (AuthorID) that references the primary key in the Authors table.
+
+#### 2. Insert Data:
+
+```sql
+
+-- Insert authors
+INSERT INTO Authors (AuthorID, AuthorName) VALUES 
+    (1, 'J.K. Rowling'),
+    (2, 'J.R.R. Tolkien'),
+    (3, 'Jane Austen');
+
+-- Insert books
+INSERT INTO Books (BookID, Title, AuthorID, Price) VALUES
+    (101, 'Harry Potter', 1, 29.99),
+    (102, 'The Lord of the Rings', 2, 39.99),
+    (103, 'Pride and Prejudice', 3, 19.99);
+```
+### 3. Diagram Representation:
+In a diagram, it would look something like this:
+
+```lua
+
++-----------+        +-----------+
+|  Authors  |        |   Books   |
++-----------+        +-----------+
+| AuthorID  |        |  BookID   |
+| AuthorName|        |  Title    |
++-----------+        | AuthorID  |
+                    |  Price    |
+                    +-----------+
+```
+In the diagram, you see the Authors table connected to the Books table through the AuthorID key. This connection represents a relationship between the two tables.
+
+#### 4. Query with Relationships:
+You can query the database to get information that involves both tables. For instance, to find the author and price of each book:
+
+```sql
+
+SELECT Books.Title, Authors.AuthorName, Books.Price
+FROM Books
+JOIN Authors ON Books.AuthorID = Authors.AuthorID;
+```
+This query uses the JOIN statement to combine data from both tables based on the AuthorID key, providing a result that includes information from both the Books and Authors tables.
