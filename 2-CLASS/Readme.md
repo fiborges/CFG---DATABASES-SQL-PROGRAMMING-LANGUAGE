@@ -20,6 +20,7 @@
 ### Example: 
   Employee Table
 
+```markdown
 | Employee ID | Employee Name | City      | Department    |
 |-------------|---------------|-----------|---------------|
 | 101         | Amit          | Kolhapur  | OBIEE, COGNOS |
@@ -27,7 +28,7 @@
 | 103         | Yodhini       | Hydrabad  | SIEBEL        |
 | 104         | Amit          | Kolhapur  | ETL           |
 
-
+```
 ### Issues:
 
 #### Update Anomaly: 
@@ -82,3 +83,79 @@ Enable quick and efficient data access and manipulation.
   Ensures no dependencies between attributes belonging to candidate keys.
 ##### Advantages: 
   Removal of data duplication, enhanced data integrity.
+
+
+## Examples:
+
+### 1. First Normal Form (1NF):
+
+```markdown
+
+| ISBN      | Title            |
+|-----------|------------------|
+| 123456789 | "Database 101"   |
+| 987654321 | "SQL Mastery"    |
+| 111223344 | "Data Modeling"  |
+
+| ISBN      | Author  |
+|-----------|---------|
+| 123456789 | John    |
+| 123456789 | Smith   |
+| 987654321 | Jane    |
+| 111223344 | John    |
+| 111223344 | Alice   |
+```
+
+### 2. Second Normal Form (2NF):
+
+```markdown
+
+| ProductID | ProductName   | Category      |
+|-----------|---------------|---------------|
+| 101       | Laptop        | Electronics   |
+| 102       | Smartphone    | Electronics   |
+| 103       | Desk Chair    | Furniture     |
+
+| OrderID   | ProductID | Quantity | Price   |
+|-----------|-----------|----------|---------|
+| 1         | 101       | 2        | 800     |
+| 2         | 102       | 3        | 300     |
+| 3         | 103       | 1        | 150     |
+```
+
+### 3. Third Normal Form (3NF):
+
+```markdown
+
+| EmployeeID | Department  | ManagerID |
+|------------|-------------|-----------|
+| 101        | IT          | 201       |
+| 201        | HR          | 301       |
+| 301        | Marketing   | NULL      |
+
+| ManagerID | ManagerName |
+|-----------|-------------|
+| 201       | John        |
+| 301       | Alice       |
+```
+### 4. Boyce-Codd Normal Form (BCNF):
+
+```markdown
+
+| StudentID | CourseID | InstructorID |
+|-----------|----------|--------------|
+| 101       | Math101  | 201          |
+| 201       | Chem101  | 302          |
+| 301       | Phys101  | 201          |
+
+| InstructorID | InstructorName |
+|--------------|-----------------|
+| 201          | Dr. Smith       |
+| 302          | Prof. Johnson   |
+```
+
+
+
+
+
+
