@@ -153,8 +153,24 @@ Enable quick and efficient data access and manipulation.
 | 201          | Dr. Smith       |
 | 302          | Prof. Johnson   |
 ```
+```markdown
+| Concept                    | Description                                                               |
+|----------------------------|---------------------------------------------------------------------------|
+| **First Normal Form (1NF)** | Ensures each column contains atomic (indivisible) values, eliminating repeating groups. 
+This means breaking down complex data into simpler, indivisible parts. For instance, a column should not contain a list of values, but rather a single value. |
+
+| **Second Normal Form (2NF)** | Eliminates partial dependencies by ensuring non-key attributes depend on the entire primary key. 
+In other words, every non-prime attribute must be fully functionally dependent on the entire primary key. 
+For example, if a table has a composite primary key, each non-key attribute should depend on the entire composite key. |
+
+| **Third Normal Form (3NF)** | Eliminates transitive dependencies by separating non-prime attributes that depend on other non-prime attributes. 
+This involves breaking down tables to ensure that attributes do not depend on other non-prime attributes. For instance, if A depends on B, and B depends on C, then A should not depend on C. |
+
+| **Boyce-Codd Normal Form (BCNF)** | Takes 3NF further by addressing dependencies between attributes belonging to candidate keys. 
+In BCNF, there are no non-trivial dependencies between attributes of a table on any candidate key. This enhances data integrity by preventing certain types of anomalies. |
 
 
+```
 
 
 
