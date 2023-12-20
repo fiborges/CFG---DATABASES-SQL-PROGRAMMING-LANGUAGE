@@ -172,6 +172,201 @@ In BCNF, there are no non-trivial dependencies between attributes of a table on 
 
 ```
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+# SQL Constraints
+## NOT NULL Constraint
+The NOT NULL constraint ensures that a column does not accept NULL values.
+
+### Example:
+
+```sql
+
+CREATE TABLE Student (
+    s_id INT NOT NULL,
+    name VARCHAR(60) NOT NULL,
+    age INT
+);
+```
+## UNIQUE Constraint
+The UNIQUE constraint ensures that a column contains only unique values.
+
+### Example:
+
+```sql
+
+CREATE TABLE Student (
+    s_id INT NOT NULL,
+    name VARCHAR(60),
+    age INT NOT NULL UNIQUE
+);
+```
+## PRIMARY KEY Constraint
+The PRIMARY KEY constraint uniquely identifies each record in a database. It must contain unique values and cannot be NULL.
+
+### Example (Table Level):
+
+```sql
+
+CREATE TABLE Student (
+    s_id INT PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    age INT
+);
+```
+### Example (Column Level):
+
+```sql
+
+ALTER TABLE Student
+ADD PRIMARY KEY (s_id);
+```
+## FOREIGN KEY Constraint
+The FOREIGN KEY constraint establishes a relationship between two tables, connecting the primary key of one table with the foreign key of another.
+
+### Example (Table Level):
+
+```sql
+
+CREATE TABLE Order_Detail (
+    order_id INT PRIMARY KEY,
+    order_name VARCHAR(60) NOT NULL,
+    c_id INT FOREIGN KEY REFERENCES Customer_Detail(c_id)
+);
+```
+### Example (Column Level):
+
+```sql
+
+ALTER TABLE Order_Detail
+ADD FOREIGN KEY (c_id) REFERENCES Customer_Detail(c_id);
+```
+## CHECK Constraint
+The CHECK constraint restricts the values of a column to a specific range.
+
+### Example (Table Level):
+
+```sql
+
+CREATE TABLE Student (
+    s_id INT NOT NULL CHECK(s_id > 0),
+    name VARCHAR(60) NOT NULL,
+    age INT
+);
+```
+### Example (Column Level):
+
+```sql
+
+ALTER TABLE Student
+ADD CHECK(s_id > 0);
+```
+## Database Normalization
+### First Normal Form (1NF)
+Eliminates repeating groups.
+Ensures each column contains atomic values.
+
+#### Example:
+
+```sql
+
+-- Before 1NF
+CREATE TABLE Employee (
+    employee_id INT,
+    departments VARCHAR(100)
+);
+
+-- After 1NF
+CREATE TABLE Employee (
+    employee_id INT,
+    department VARCHAR(50)
+);
+```
+### Second Normal Form (2NF)
+In 1NF.
+No partial dependencies on the primary key.
+
+#### Example:
+
+```sql
+
+-- Before 2NF
+CREATE TABLE Sales (
+    order_id INT,
+    product_id INT,
+    category VARCHAR(50),
+    quantity INT,
+    price INT
+);
+
+-- After 2NF
+CREATE TABLE Products (
+    product_id INT,
+    category VARCHAR(50)
+);
+
+CREATE TABLE Sales (
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    price INT
+);
+```
+### Third Normal Form (3NF)
+In 2NF.
+No transitive dependencies.
+
+#### Example:
+
+```sql
+
+-- Before 3NF
+CREATE TABLE Employee_Info (
+    employee_id INT,
+    department VARCHAR(50),
+    manager_id INT,
+    manager_name VARCHAR(50)
+);
+
+-- After 3NF
+CREATE TABLE Employee (
+    employee_id INT,
+    department VARCHAR(50),
+    manager_id INT
+);
+
+CREATE TABLE Manager (
+    manager_id INT,
+    manager_name VARCHAR(50)
+);
+```
+### Boyce-Codd Normal Form (BCNF)
+In 3NF.
+No dependencies between attributes that belong to candidate keys.
+
+#### Example:
+
+```sql
+
+-- Before BCNF
+CREATE TABLE Course_Enrollment (
+    student_id INT,
+    course_id INT,
+    instructor_id INT,
+    instructor_name VARCHAR(50)
+);
+
+-- After BCNF
+CREATE TABLE Enrollment (
+    student_id INT,
+    course_id INT,
+    instructor_id INT
+);
+
+CREATE TABLE Instructor (
+    instructor_id INT,
+    instructor_name VARCHAR(50)
+);
+```
 
 
