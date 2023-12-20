@@ -369,4 +369,270 @@ CREATE TABLE Instructor (
 );
 ```
 
+------------------------------------------------------------------------------------------------------------------------------------
 
+# Data Definition Language (DDL):
+
+DDL, or Data Definition Language, is a category of SQL (Structured Query Language) statements that focus on defining and managing the structure of a relational database. DDL commands enable database administrators and developers to create, modify, and delete database objects, such as tables, indexes, and views. These commands are responsible for specifying how data should be stored and organized within the database.
+
+## Here are some key DDL commands:
+
+### CREATE:
+
+#### Purpose: 
+  Creates a new database object, such as a table, index, or view.
+#### Example:
+
+```sql
+
+CREATE TABLE Students (
+    ID INT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Age INT
+);
+```
+
+### ALTER:
+
+#### Purpose: 
+  Modifies the structure of an existing database object, such as adding or removing columns.
+#### Example:
+
+```sql
+
+ALTER TABLE Students ADD COLUMN Grade INT;
+```
+
+### DROP:
+
+#### Purpose: 
+  Deletes an existing database object, along with its data.
+#### Example:
+
+```sql
+
+DROP TABLE Students;
+```
+
+### CREATE INDEX:
+
+#### Purpose: 
+  Creates an index on a table to enhance the performance of specific queries.
+#### Example:
+
+```sql
+
+CREATE INDEX idx_name ON Students(Name);
+```
+
+### CREATE VIEW:
+
+#### Purpose: 
+  Creates a virtual table based on one or more existing tables.
+
+#### Example:
+
+```sql
+
+CREATE VIEW YoungStudents AS SELECT * FROM Students WHERE Age < 25;
+```
+### CREATE PROCEDURE:
+
+#### Purpose: 
+  Creates a stored procedure, a precompiled set of SQL statements that can be executed multiple times.
+
+#### Example:
+```sql
+
+CREATE PROCEDURE GetStudentCount() SELECT COUNT(*) FROM Students;
+```
+### CREATE FUNCTION:
+
+#### Purpose: 
+  Creates a custom user-defined function for specific calculations or operations.
+#### Example:
+
+```sql
+
+CREATE FUNCTION CalculateAverageGrade(grades INT[]) RETURNS INT RETURN SUM(grades) / COUNT(grades);
+```
+
+### CREATE TRIGGER:
+
+#### Purpose: 
+  Creates a trigger, a set of instructions that are automatically executed in response to specific events, such as data modifications.
+#### Example:
+```sql
+
+CREATE TRIGGER BeforeInsertStudent BEFORE INSERT ON Students FOR EACH ROW SET NEW.CreatedAt = NOW();
+```
+DDL statements are crucial for database administrators and developers to design and manage the overall structure of a database, ensuring efficient data organization and retrieval.
+
+# Data Manipulation Language (DML):
+
+DML, or Data Manipulation Language, is a subset of SQL (Structured Query Language) that deals with the manipulation and processing of data stored in a database. Unlike DDL (Data Definition Language), which focuses on the structure of the database, DML is concerned with the actual data within the database. DML commands enable users to interact with the data by performing operations such as retrieval, insertion, updating, and deletion.
+
+## Here are some key DML commands:
+
+### SELECT:
+
+#### Purpose: 
+  Retrieves data from one or more tables.
+#### Example:
+```sql
+
+SELECT * FROM Students WHERE Age > 20;
+```
+### INSERT:
+
+#### Purpose: 
+  Adds new records into a table.
+#### Example:
+```sql
+
+INSERT INTO Students (Name, Age) VALUES ('Alice', 22);
+```
+### UPDATE:
+
+#### Purpose: 
+  Modifies existing data in a table.
+#### Example:
+```sql
+
+UPDATE Students SET Age = 23 WHERE Name = 'Alice';
+```
+### DELETE:
+
+#### Purpose: 
+  Removes records from a table based on specified conditions.
+#### Example:
+```sql
+
+DELETE FROM Students WHERE Age > 25;
+```
+### REPLACE:
+
+#### Purpose: 
+  Updates or inserts a record into a table. If a record with the same primary key exists, it is updated; otherwise, a new record is inserted.
+#### Example:
+```sql
+
+REPLACE INTO Students (ID, Name, Age) VALUES (1, 'Bob', 28);
+```
+### MERGE:
+
+#### Purpose: 
+  Performs an "upsert" operation, meaning it either updates an existing record or inserts a new one, depending on specified conditions.
+#### Example:
+```sql
+
+MERGE INTO TargetTable USING SourceTable ON TargetTable.ID = SourceTable.ID WHEN MATCHED THEN UPDATE SET TargetTable.Name = SourceTable.Name WHEN NOT MATCHED THEN INSERT (ID, Name) VALUES (SourceTable.ID, SourceTable.Name);
+```
+### CALL:
+
+#### Purpose: 
+  Executes a stored procedure or a user-defined function.
+#### Example:
+```sql
+
+CALL CalculateAverageGrade();
+```
+### EXPLAIN:
+
+#### Purpose: Displays the execution plan for a given query, showing how the database will process the query.
+#### Example:
+```sql
+
+EXPLAIN SELECT * FROM Students WHERE Age > 20;
+```
+### LOCK TABLE:
+
+#### Purpose: 
+  Locks a table to prevent other users from modifying it while a transaction is in progress.
+#### Example:
+```sql
+
+LOCK TABLE Students IN SHARE MODE;
+```
+DML commands are essential for users to interact with the data stored in a database. Whether it's querying information, adding new records, updating existing ones, or deleting unwanted data, DML provides the tools to manage the actual content of the database.
+
+# Transaction Control Language (TCL):
+
+TCL, or Transaction Control Language, is a subset of SQL (Structured Query Language) that deals with the control and management of transactions within a database. A transaction is a sequence of one or more SQL statements that are treated as a single unit of work. TCL commands enable users to manage the state and consistency of the database by controlling the beginning, ending, and outcome of transactions.
+
+## Here are some key TCL commands:
+
+### COMMIT:
+
+#### Purpose: 
+  Commits a transaction, making all the changes made during the transaction permanent.
+#### Example:
+```sql
+
+COMMIT;
+```
+### ROLLBACK:
+
+#### Purpose: 
+  Rolls back a transaction, undoing all the changes made during the transaction.
+#### Example:
+```sql
+
+ROLLBACK;
+```
+### SAVEPOINT:
+
+#### Purpose: 
+  Creates a savepoint within a transaction. If later commands fail, you can roll back the transaction to the savepoint.
+#### Example:
+
+```sql
+
+SAVEPOINT mySavepoint;
+```
+### ROLLBACK TO SAVEPOINT:
+
+#### Purpose: 
+  Rolls back the transaction to a specified savepoint, undoing changes made after that point.
+#### Example:
+```sql
+
+ROLLBACK TO mySavepoint;
+```
+### SET TRANSACTION:
+
+#### Purpose: 
+  Specifies characteristics of a transaction, such as its isolation level and other properties.
+#### Example:
+```sql
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+TCL commands are crucial for managing the integrity and consistency of the database in the context of transactions. By using these commands, users can ensure that changes made to the database are controlled and either committed to make them permanent or rolled back to maintain the database in a consistent state. The ability to set savepoints provides additional flexibility in managing complex transactions, allowing for partial rollbacks if needed.
+
+# Data Control Language (DCL):
+
+DCL, or Data Control Language, is a subset of SQL (Structured Query Language) that deals with controlling access to data within a database. DCL commands are responsible for managing user privileges, permissions, and other security-related aspects. These commands play a crucial role in defining who can access specific data, perform certain operations, and manage the overall security of the database system.
+
+## Here are two primary DCL commands:
+
+### GRANT:
+
+#### Purpose: 
+  Grants specific privileges to a user or a group of users. These privileges can include the ability to SELECT, INSERT, UPDATE, DELETE, or perform other operations on specific tables or objects.
+#### Example:
+```sql
+
+GRANT SELECT, INSERT ON employees TO user1;
+```
+### REVOKE:
+
+#### Purpose: 
+  Revokes previously granted privileges from a user or a group of users. This command restricts or removes specific permissions.
+#### Example:
+```sql
+
+REVOKE UPDATE ON products FROM user2;
+```
+DCL commands are essential for enforcing security and access control policies within a database. By using GRANT and REVOKE, database administrators can carefully define which users have what level of access to specific database objects. This helps in preventing unauthorized access, ensuring data privacy, and maintaining the overall integrity of the database. Properly implementing DCL commands is crucial for securing sensitive information and complying with regulatory requirements.
