@@ -117,3 +117,85 @@ FROM person p
 WHERE p.email_address IS NULL;
 
 ```
+# Aggregation and Order
+We not only want to extract data but also organize, understand, interpret, and analyze it. To achieve this, we use the ORDER BY and GROUP BY statements.
+
+## ORDER BY
+The ORDER BY clause is used with the SELECT statement to arrange retrieved data in sorted order.
+
+### Syntax Example:
+
+```sql
+
+SELECT p.surname, p.name 
+FROM person p 
+ORDER BY p.surname;
+```
+Who are all the customers in our contacts ordered by surname?
+
+## Set Functions
+Set functions are 'helper' functions that allow us to ask more interesting, complex questions when querying a database. These functions compute a new value from passed-in column values. Examples of core set functions include COUNT, MAX, MIN, SUM, AVG, and GROUP_CONCAT.
+
+```markdown
+
+| Function | Effect                                                   | 
+|----------|----------------------------------------------------------| 
+| COUNT    | Count of all column values specified (includes NULL values if * is used) | 
+| MAX      | Maximum value of the column (does not include NULL values) | 
+| MIN      | Minimum value of the column (does not include NULL values) | 
+| SUM      | Sum of all values of the column (does not include NULL values, only numeric column) | 
+| AVG      | Average of all values of the column (does not include NULL values, only numeric column) | 
+| GROUP_CONCAT | Transforms values from a group of rows into a delimited string |
+```
+
+### Syntax Example (SUM):
+
+```sql
+
+SELECT SUM(c.orders) 
+FROM customer c;
+```
+What is the total number of all orders placed by our customers?
+
+### Syntax Example (COUNT with DISTINCT):
+
+```sql
+
+SELECT COUNT(DISTINCT c.name) 
+FROM customers c;
+```
+What is the count of unique first names among our customers' contacts?
+
+## GROUP BY
+GROUP BY is a SQL command used to group rows that have the same values. It allows multiple columns with a set function and breaks the result set into subsets, running a set function against each subset.
+
+### Syntax Example:
+
+```sql
+
+SELECT COUNT(DISTINCT c.name), c.name 
+FROM customers AS c 
+GROUP BY c.name;
+```
+What is the count of unique first names among our customers' contacts?
+
+## HAVING
+The HAVING clause filters records based on summarised GROUP BY results. It is used with aggregate functions.
+
+#### Syntax Example:
+
+```sql
+
+SELECT COUNT(DISTINCT c.name), c.name 
+FROM customers AS c 
+GROUP BY c.name 
+HAVING COUNT(DISTINCT c.name) >= 3;
+```
+What is the count of unique first names among our customers' contacts that appear at least 3 times?
+
+
+
+
+
+
+
