@@ -90,3 +90,169 @@ RIGHT JOIN <table2> ON <condition>;
 
 ```
 
+## Fruit Basket Tables exercise
+Table Creation and Data Insertion
+```sql
+
+-- Create Database
+CREATE DATABASE JOINS_PRACTICE;
+USE JOINS_PRACTICE;
+
+-- Create Table 1
+CREATE TABLE Table1_fruit_basket (
+    ID INT, 
+    Fruit VARCHAR(50)
+);
+
+INSERT INTO Table1_fruit_basket 
+(ID, Fruit)
+VALUES
+(1, 'pear'),
+(2, 'apple'),
+(3, 'kiwi'),
+(4, 'orange'),
+(5, 'banana');
+
+-- Create Table 2
+CREATE TABLE Table2_fruit_basket (
+    ID INT, 
+    Fruit VARCHAR(50)
+);
+
+INSERT INTO Table2_fruit_basket 
+(ID, Fruit)
+VALUES
+(1, 'pear'),
+(2, 'apple'),
+(3, 'kiwi'),
+(6, 'melon'),
+(7, 'peach'),
+(8, 'plum');
+```
+## INNER JOIN
+```sql
+
+-- INNER JOIN
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+INNER JOIN Table2_fruit_basket AS t2
+ON t1.ID = t2.ID;
+
+```
+## LEFT JOIN
+```sql
+
+-- LEFT JOIN
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+LEFT JOIN Table2_fruit_basket AS t2
+ON t1.ID = t2.ID;
+```
+## RIGHT JOIN
+```sql
+
+-- RIGHT JOIN
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+RIGHT JOIN Table2_fruit_basket AS t2
+ON t1.ID = t2.ID;
+```
+## CROSS JOIN
+```sql
+
+-- CROSS JOIN - fruit basket
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+CROSS JOIN Table2_fruit_basket AS t2;
+```
+## NATURAL JOIN
+```sql
+
+-- NATURAL JOIN
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+NATURAL JOIN Table2_fruit_basket AS t2;
+```
+## Self Joins - Employee Table
+Employee Table Creation and Data Insertion
+```sql
+
+-- Create Employee Table
+CREATE TABLE Employee (
+    EmployeeID INT PRIMARY KEY,
+    Name NVARCHAR(55),
+    ManagerID INT
+);
+
+-- Insert Sample Data
+INSERT INTO Employee
+(EmployeeID, Name, ManagerID)
+VALUES
+(1, 'Mike', 3),
+(2, 'David', 3),
+(3, 'Roger', NULL),
+(4, 'Marry', 2),
+(5, 'Joseph', 2),
+(7, 'Ben', 2);
+```
+## Self Joins Examples
+### 1. Employees and Their Managers
+```sql
+
+-- Employees and Their Managers
+SELECT e1.Name AS Employee, e2.Name AS Manager
+FROM Employee e1
+INNER JOIN Employee e2 ON e1.ManagerID = e2.EmployeeID;
+```
+### 2. Employees and Managers (Handle Employees without Managers)
+```sql
+
+-- Employees and Managers (Handle Employees without Managers)
+SELECT e1.Name AS Employee, COALESCE(e2.Name, 'Top Manager') AS Manager
+FROM Employee e1
+LEFT JOIN Employee e2 ON e1.ManagerID = e2.EmployeeID;
+```
+## Union and Union All
+Union and Union All Examples
+### 1. Union (Excluding Duplicates)
+```sql
+
+-- Union (Excluding Duplicates)
+SELECT ID, Fruit FROM Table1_fruit_basket
+UNION
+SELECT ID, Fruit FROM Table2_fruit_basket;
+```
+### 2. Union All (Including Duplicates)
+```sql
+
+-- Union All (Including Duplicates)
+SELECT ID, Fruit FROM Table1_fruit_basket
+UNION ALL
+SELECT ID, Fruit FROM Table2_fruit_basket;
+```
+### 3. Mimic FULL OUTER JOIN with Union
+```sql
+
+-- Mimic FULL OUTER JOIN with Union
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+LEFT JOIN Table2_fruit_basket AS t2 ON t1.ID = t2.ID
+UNION
+SELECT t1.ID AS t1ID, t1.Fruit AS t1Fruit, t2.ID AS t2ID, t2.Fruit AS t2Fruit
+FROM Table1_fruit_basket AS t1
+RIGHT JOIN Table2_fruit_basket AS t2 ON t1.ID = t2.ID;
+```
+## Subqueries
+### Subqueries Examples
+### 1. Find Customers with Phone Number '555-3344'
+```sql
+
+-- Find Customers with Phone Number '555-3344'
+USE customers;
+
+SELECT first_name, last_name
+FROM customers
+WHERE phone_number = '555-3344';
+
+```
+
