@@ -1,0 +1,6 @@
+t1ID,t1Fruit,t2ID,t2Fruit
+1,pear,1,pear
+2,apple,2,apple
+3,kiwi,3,kiwi
+4,orange,NULL,NULL
+5,banana,NULL,NULL
