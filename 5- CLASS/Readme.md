@@ -98,3 +98,57 @@ FROM products;
 SELECT CONCAT(first_name, ' ', last_name) AS full_name
 FROM employees;
 ```
+## PRATICE NUMBER 1 EXAMPLE:
+
+```sql
+
+-- Create the database
+CREATE DATABASE IF NOT EXISTS test_database;
+
+-- Use the database
+USE test_database;
+
+-- Create the employee_data table
+CREATE TABLE IF NOT EXISTS employee_data (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    salary DECIMAL(10, 2),
+    hire_date DATE
+);
+ -- Insert sample data
+INSERT INTO employee_data (first_name, last_name, salary, hire_date)
+VALUES
+    ('John', 'Doe', 50000.00, '2022-01-01'),
+    ('Jane', 'Smith', 60000.00, '2022-02-15'),
+    ('Bob', 'Johnson', 55000.00, '2022-03-10'),
+    ('Alice', 'Williams', 70000.00, '2022-04-20');
+```
+Now, you can use the queries to practice the REPLACE, POW, and ADDDATE functions on this employee_data table.
+
+### Example queries:
+
+### REPLACE String Function:
+
+```sql
+
+-- Replace 'Doe' with 'Johnson' in the last names
+SELECT first_name, REPLACE(last_name, 'Doe', 'Johnson') AS modified_last_name
+FROM employee_data;
+```
+### POW Numeric Function:
+
+```sql
+
+-- Calculate the square of the salaries
+SELECT first_name, POW(salary, 2) AS squared_salary
+FROM employee_data;
+```
+### ADDDATE Date Function:
+
+```sql
+
+-- Add 30 days to the hire dates
+SELECT first_name, ADDDATE(hire_date, 30) AS modified_hire_date
+FROM employee_data;
+```
