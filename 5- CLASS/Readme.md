@@ -223,3 +223,163 @@ BEGIN
 END;
 
 ```
+# TASK 2
+Let's create an example SQL transaction that imitates a transfer of £50 between two accounts. In this scenario, we'll have two tables: accounts and transactions.
+
+### Assuming the accounts table structure is as follows:
+
+```sql
+
+CREATE TABLE accounts (
+    account_id INT PRIMARY KEY,
+    account_number VARCHAR(10) UNIQUE,
+    balance DECIMAL(10, 2)
+);
+```
+And the transactions table structure to keep track of the transactions:
+
+```sql
+
+CREATE TABLE transactions (
+    transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    from_account_number VARCHAR(10),
+    to_account_number VARCHAR(10),
+    amount DECIMAL(10, 2),
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+Now, let's write a SQL transaction statement:
+
+```sql
+
+-- Begin the transaction
+START TRANSACTION;
+
+-- Set the account numbers
+SET @from_account_number = 'A123';
+SET @to_account_number = 'B456';
+SET @transfer_amount = 50.00;
+
+-- Check if the balance of the first account is greater than £50
+SELECT balance INTO @from_account_balance FROM accounts WHERE account_number = @from_account_number FOR UPDATE;
+
+IF @from_account_balance >= @transfer_amount THEN
+    -- Deduct £50 from the first account
+    UPDATE accounts SET balance = balance - @transfer_amount WHERE account_number = @from_account_number;
+
+    -- Add £50 to the second account
+    UPDATE accounts SET balance = balance + @transfer_amount WHERE account_number = @to_account_number;
+
+    -- Record the transaction
+    INSERT INTO transactions (from_account_number, to_account_number, amount) VALUES (@from_account_number, @to_account_number, @transfer_amount);
+
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Display success message
+    SELECT 'Transaction completed successfully.' AS result;
+
+ELSE
+    -- Rollback the transaction if the balance is insufficient
+    ROLLBACK;
+    
+    -- Display error message
+    SELECT 'Insufficient funds in the first account.' AS result;
+END IF;
+```
+
+## Explanation:
+
+We use START TRANSACTION to begin the transaction.
+The FOR UPDATE clause is used in the SELECT statement to lock the row, ensuring that no other transaction can modify it until the current transaction is committed or rolled back.
+If the balance in the first account is sufficient, we deduct £50 from the first account, add £50 to the second account, record the transaction, and commit the transaction.
+If the balance is insufficient, we rollback the transaction and display an error message.
+
+This example demonstrates a simple yet realistic SQL transaction for a fund transfer between two accounts.
+
+
+# Table Locking in SQL
+## Introduction
+Table locking is a crucial aspect of SQL transaction management that allows users to control access to a table during certain operations. It involves acquiring a lock on a table, which prevents other sessions or users from making changes to the same table for a specific period. This practice is essential for maintaining data integrity and ensuring that operations are performed without interference.
+
+## Read Lock
+The session holding a READ lock can only read data from the table but cannot write to it.
+Multiple sessions can acquire READ locks on the same table simultaneously.
+Other sessions are prevented from writing data to the table until the READ lock is released. Any write operations from other sessions will be queued until the READ lock is released.
+If a session is terminated, whether normally or unexpectedly, MySQL automatically releases all locks held by that session.
+
+### Syntax
+```sql
+
+-- Acquiring a READ lock
+LOCK TABLE <table_name> READ;
+
+-- Perform read operations on the table
+
+-- Releasing the READ lock
+
+ UNLOCK TABLES;
+```
+
+### Example
+Consider a scenario where births are being registered in a database with two tables: Parent and Child. We want to insert a new row into the Child table while ensuring that every child row refers to a valid parent row in the Parent table. To maintain consistency, we acquire a READ lock on the Parent table before performing the update on the Child table.
+
+```sql
++
+-- Acquiring a READ lock on 'Parent' table
+LOCK TABLE Parent READ;
+
+-- Perform update on 'Child' table
+-- (Ensure that every child row refers to a parent row in 'Parent')
+
+-- Releasing the READ lock
+UNLOCK TABLES;
+```
+## Write Lock
+
+A WRITE lock is an exclusive lock that gives the session holding the lock full write access to the table.
+Other sessions are completely restricted from reading or writing to the table until the WRITE lock is released.
+
+### Syntax
+```sql
+
+-- Acquiring a WRITE lock
+LOCK TABLE <table_name> WRITE;
+
+-- Perform write operations on the table
+
+-- Releasing the WRITE lock
+UNLOCK TABLES;
+```
+### Example
+Continuing with the example of the Parent and Child tables, if we need to add a new record to the Child table and ensure that no other session writes new data into the same table simultaneously, we acquire a WRITE lock on the Child table.
+
+```sql
+
+-- Acquiring a WRITE lock on 'Child' table
+LOCK TABLE Child WRITE;
+
+-- Perform write operations on 'Child' table
+-- (Add a new record)
+
+-- Releasing the WRITE lock
+UNLOCK TABLES;
+
+```
+### Combined Read and Write Locks
+In some cases, both READ and WRITE locks may be needed simultaneously, and the syntax for acquiring them is as follows:
+
+```sql
+
+-- Acquiring both READ and WRITE locks
+LOCK TABLES Parent READ, Child WRITE;
+
+-- Perform necessary operations
+
+-- Releasing both locks
+UNLOCK TABLES;
+```
+## Summary
+
+Table locking is a fundamental practice in SQL transaction management, ensuring the integrity of data during updates or maintenance. Acquiring READ and WRITE locks allows users to control access to tables, preventing unwanted interference from other sessions. These locks help maintain referential integrity, minimize data errors, and ensure the success of transactions within a database.
+
