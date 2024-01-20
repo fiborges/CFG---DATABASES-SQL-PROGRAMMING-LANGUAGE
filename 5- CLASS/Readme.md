@@ -152,3 +152,74 @@ FROM employee_data;
 SELECT first_name, ADDDATE(hire_date, 30) AS modified_hire_date
 FROM employee_data;
 ```
+# Transactions in SQL
+## Introduction
+A transaction in SQL is a sequence of one or more SQL statements that are executed as a single unit of work. Transactions provide a way to ensure the integrity and consistency of the database by allowing a series of operations to be treated as a single, indivisible unit. The primary goal of transactions is to guarantee that the database remains in a consistent state, even in the presence of errors, failures, or concurrent access by multiple users.
+
+## Properties of Transactions
+Transactions in SQL adhere to the principles of ACID, which stands for:
+
+### Atomicity: 
+       Transactions are atomic, meaning that they are treated as a single, indivisible unit of work. Either all the operations within the transaction are executed successfully, or none of them are.
+
+### Consistency: 
+       A transaction brings the database from one consistent state to another. The integrity constraints of the database should be maintained before and after the transaction.
+
+### Isolation: 
+       Each transaction is executed in isolation from other transactions. Changes made by one transaction are not visible to other transactions until the changes are committed.
+
+### Durability: 
+       Once a transaction is committed, its effects are permanent and will survive subsequent system failures. The changes become a permanent part of the database.
+
+## Transaction Commands
+In SQL, transactions are managed using the following commands:
+
+### BEGIN TRANSACTION: 
+       Starts a new transaction.
+
+### COMMIT: 
+       Marks the successful end of a transaction. All changes made during the transaction are made permanent.
+
+### ROLLBACK: 
+       Undoes the changes made during the current transaction and rolls back to the previous state. It is used to handle errors or unexpected situations.
+
+## Transaction Example
+Consider a banking scenario where a user transfers money from one account to another. This operation involves two updates: deducting money from one account and adding it to another.
+
+```sql
+
+-- Begin the transaction
+BEGIN TRANSACTION;
+
+-- Deduct money from Account A
+UPDATE accounts SET balance = balance - 100 WHERE account_number = 'A123';
+
+-- Add money to Account B
+UPDATE accounts SET balance = balance + 100 WHERE account_number = 'B456';
+
+-- Commit the transaction
+COMMIT;
+```
+If any of the updates fail (due to an error or any other reason), the entire transaction will be rolled back, ensuring that the database remains in a consistent state.
+
+## Transaction Control in Stored Procedures
+Transactions are often used within stored procedures to encapsulate a series of SQL statements as a single unit of work. The BEGIN TRANSACTION, COMMIT, and ROLLBACK commands can be used within stored procedures to control transactions.
+
+```sql
+
+-- Example stored procedure with transaction control
+CREATE PROCEDURE TransferMoney(from_account VARCHAR(10), to_account VARCHAR(10), amount DECIMAL(10,2))
+BEGIN
+    BEGIN TRANSACTION;
+
+    UPDATE accounts SET balance = balance - amount WHERE account_number = from_account;
+    UPDATE accounts SET balance = balance + amount WHERE account_number = to_account;
+
+    IF (some_condition) THEN
+        COMMIT; -- Commit the transaction if all updates are successful
+    ELSE
+        ROLLBACK; -- Rollback the transaction if there is an error or condition is not met
+    END IF;
+END;
+
+```
