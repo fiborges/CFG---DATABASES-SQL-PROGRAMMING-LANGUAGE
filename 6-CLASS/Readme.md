@@ -288,3 +288,86 @@ Events are another mechanism for automating tasks in a database management syste
 
 #### Database Maintenance: 
   Events can trigger routine maintenance tasks such as optimizing database tables, cleaning up temporary data, or updating statistics.
+
+
+# TASK 3
+
+### Creating a Trigger
+A trigger is a block of code that gets executed automatically before or after specific actions like INSERT, UPDATE, or DELETE. In this example, we'll create a trigger that activates before an INSERT statement and logs timestamp values into a table.
+
+First, make sure you have a MySQL database set up.
+
+Create a sample table to log timestamp values. You can use the following SQL command to create the table:
+
+```sql
+
+CREATE TABLE timestamp_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_description VARCHAR(255),
+    timestamp_value TIMESTAMP
+);
+```
+Now, let's create a trigger that activates before an INSERT statement. This trigger will log a timestamp and a description whenever a new row is inserted into a hypothetical orders table.
+```sql
+
+DELIMITER //
+CREATE TRIGGER before_insert_order
+BEFORE INSERT
+ON orders
+FOR EACH ROW
+BEGIN
+    INSERT INTO timestamp_log (event_description, timestamp_value)
+    VALUES ('New order inserted', NOW());
+END;
+//
+DELIMITER ;
+```
+### In this trigger:
+
+before_insert_order is the trigger's name.
+BEFORE INSERT specifies that the trigger should activate before an INSERT statement.
+ON orders indicates that the trigger is associated with the orders table.
+FOR EACH ROW means that the trigger operates on a row-level basis.
+Inside the BEGIN block, we insert a new row into the timestamp_log table with a description and the current timestamp.
+
+## Creating Events
+Events are blocks of code that can be scheduled to run automatically at specific times or on a recurring basis.
+
+To create a one-off event that logs a timestamp into the timestamp_log table, use the following SQL command:
+
+```sql
+
+CREATE EVENT one_off_event
+ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+DO
+BEGIN
+    INSERT INTO timestamp_log (event_description, timestamp_value)
+    VALUES ('One-off event', NOW());
+END;
+```
+
+### In this event:
+
+one_off_event is the event's name.
+ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE schedules the event to run one minute after it is created.
+Inside the DO block, we insert a new row into the timestamp_log table with a description and the current timestamp.
+
+To create a recurring event that logs a timestamp every day at a specific time, use the following SQL command:
+
+```sql
+
+CREATE EVENT recurring_event
+ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP + INTERVAL 1 DAY
+DO
+BEGIN
+    INSERT INTO timestamp_log (event_description, timestamp_value)
+    VALUES ('Recurring event', NOW());
+END;
+```
+
+### In this event:
+
+recurring_event is the event's name.
+ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP + INTERVAL 1 DAY schedules the event to run every day, starting one day from the current time.
+Inside the DO block, we insert a new row into the timestamp_log table with a description and the current timestamp.
+
