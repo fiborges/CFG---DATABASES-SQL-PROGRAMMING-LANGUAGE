@@ -244,3 +244,47 @@ DELIMITER ;
 
 We define a stored procedure named InsertBakeryOrder that accepts three IN parameters: order_id (INT), customer_name (VARCHAR), and order_amount (DECIMAL).
 Inside the procedure, we use an INSERT INTO statement to insert the provided values into the BakeryOrders table.
+
+# Triggers and Events in Database Management
+## Triggers
+A trigger is a powerful feature in a database management system that allows you to automate actions when specific database events, such as INSERT, UPDATE, or DELETE operations, occur. Triggers are essential for maintaining data integrity, enforcing business rules, and keeping track of changes in the database.
+
+### Key Concepts:
+#### Trigger Execution: 
+  Triggers are automatically executed (or fired) in response to predefined database events. These events include INSERT, UPDATE, DELETE, and more.
+
+#### FOR EACH ROW: 
+  Triggers are created with the FOR EACH ROW clause, which specifies that the trigger operates on a row-level basis. This means that the trigger can access and manipulate data for each affected row individually.
+
+#### OLD and NEW Keywords: 
+  Within a trigger, you can use the OLD keyword to access values from rows that are being updated or deleted, and the NEW keyword to access values from the row that is being inserted or updated. These keywords are useful for comparing old and new data and making decisions based on the changes.
+
+### Common Use Cases:
+#### Data Validation: 
+  Triggers can enforce data validation rules, ensuring that only valid data is allowed into the database.
+
+#### Audit Trails: 
+  Triggers can be used to maintain audit tables, recording every change made to specific tables for tracking purposes.
+
+#### Referential Integrity: 
+  Triggers can enforce referential integrity constraints by preventing actions that would violate foreign key relationships.
+
+## Events
+Events are another mechanism for automating tasks in a database management system. Unlike triggers, events are time-based and can execute a block of code at a specified time or according to a recurring schedule. They are commonly used for performing maintenance tasks and other actions that are not directly tied to specific data changes.
+
+### Key Concepts:
+#### Event Scheduler: 
+  Events are executed automatically by the event scheduler in the database system. The event scheduler is responsible for triggering events based on predefined schedules.
+
+#### One-Time or Recurring: 
+  An event can be defined as a one-time event, which executes a specific action once, or as a recurring event, which repeats the action at regular intervals.
+
+### Common Use Cases:
+#### Scheduled Backups: 
+  Events can be set up to perform automated database backups at specific times, ensuring data reliability.
+
+#### Data Archiving: 
+  You can use events to archive old data by moving it to a historical storage location, keeping the primary database optimized.
+
+#### Database Maintenance: 
+  Events can trigger routine maintenance tasks such as optimizing database tables, cleaning up temporary data, or updating statistics.
