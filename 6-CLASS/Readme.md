@@ -100,3 +100,147 @@ WITH CHECK OPTION;
 ### Insert Data through the Check View
 Attempt to insert new data into the StaffWithCheck view. Ensure that you insert data consistent with the view's filter conditions.
 
+# Working with Stored Procedures and Stored Functions
+## Stored Procedures
+### What is a Stored Procedure?
+A stored procedure is a subroutine available to applications that access a relational database system.
+It contains one or more SQL statements stored in the database.
+Typically used for Data Validation and Access Control Methods.
+Often referred to as a "sproc" or procedure.
+Parameters are used to pass values from the calling program.
+
+### Advantages of Stored Procedures
+Helps in code reusability by creating a procedure for a specific task and reusing it when needed, reducing overhead.
+Avoids unnecessary network traffic by executing code directly on the database.
+Encapsulates business logic, making code more maintainable.
+Delegates access rights and enhances security.
+Protects against SQL Injection attacks.
+
+### Creating a Stored Procedure
+```sql
+
+DELIMITER //
+CREATE PROCEDURE <proc_name>()
+BEGIN
+    DECLARE <variable>;
+    -- Procedure logic
+END//
+DELIMITER ;
+```
+### Calling a Stored Procedure
+To execute a stored procedure, use the CALL keyword:
+
+```sql
+
+CALL <proc_name>();
+```
+## Stored Functions
+### What is a Stored Function?
+A stored function is an executable database object with SQL procedural code.
+Often called a User Defined Function (UDF) or just a function.
+Cannot modify the database using INSERT, UPDATE, or DELETE statements.
+Used in SQL queries similar to built-in functions.
+Returns a single value (scalar function).
+
+### Creating a Stored Function
+```sql
+
+DELIMITER //
+CREATE FUNCTION <func_name>(param TYPE)
+RETURNS TYPE
+BEGIN
+    DECLARE <variable>;
+    -- Function logic
+    RETURN (<result>);
+END//
+DELIMITER ;
+```
+
+## Differences Between Procedure and Function
+### Stored Procedure:
+
+Returns many values.
+Supports input and output parameters.
+Cannot be used directly in SELECT statements.
+Can call functions.
+May not return a value.
+Used for reading and modifying data (e.g., INSERT, UPDATE, DELETE, SELECT).
+Manages transactions.
+
+### Stored Function:
+
+Returns only one value.
+Uses only input parameters.
+Can be used in SELECT statements.
+Cannot call procedures.
+Must return a value.
+Used for reading data (e.g., SELECT).
+Does not manage transactions.
+
+
+# TASK 2
+
+## Write a Stored Function to Assess Credit Eligibility
+In this task, we will write a stored function in the bank database that accepts a customer's account balance as a parameter and assesses whether the customer is eligible for a credit. Let's assume that a customer is eligible for credit if their account balance is greater than or equal to a certain threshold.
+
+```sql
+
+DELIMITER //
+CREATE FUNCTION AssessCreditEligibility(balance DECIMAL(10, 2)) RETURNS VARCHAR(50)
+BEGIN
+    DECLARE eligibility_status VARCHAR(50);
+    
+    IF balance >= 1000.00 THEN
+        SET eligibility_status = 'Eligible for Credit';
+    ELSE
+        SET eligibility_status = 'Not Eligible for Credit';
+    END IF;
+    
+    RETURN eligibility_status;
+END//
+DELIMITER ;
+```
+### Explanation:
+
+We define a stored function named AssessCreditEligibility that accepts a balance parameter of type DECIMAL(10, 2) (assuming the balance is stored as a decimal with two decimal places).
+Inside the function, we declare a variable eligibility_status to store the eligibility status message.
+We use an IF statement to check if the balance is greater than or equal to 1000.00 (you can adjust this threshold as needed). If it is, we set eligibility_status to 'Eligible for Credit'; otherwise, it's set to 'Not Eligible for Credit'.
+Finally, we return the eligibility_status as the result of the function.
+
+## Create a Simple Greetings Stored Procedure
+In this task, we will create a simple stored procedure to display a greeting message.
+
+```sql
+
+DELIMITER //
+CREATE PROCEDURE GreetCustomer(IN customer_name VARCHAR(50))
+BEGIN
+    SELECT CONCAT('Hello, ', customer_name, '! Welcome to our bank.') AS Greeting;
+END//
+DELIMITER ;
+```
+### Explanation:
+
+We define a stored procedure named GreetCustomer that accepts an IN parameter called customer_name of type VARCHAR(50).
+Inside the procedure, we use a SELECT statement to construct a greeting message by concatenating 'Hello, ' with the customer_name parameter and 'Welcome to our bank.'.
+The result is displayed as 'Greeting'.
+
+## Write a Stored Procedure to Insert Values into a Table
+In this task, we will write a stored procedure that accepts parameters and inserts values into a table in the bakery database.
+
+Assuming you have a table named BakeryOrders with columns OrderID, CustomerName, and OrderAmount, here's a stored procedure to insert values into that table:
+
+```sql
+
+DELIMITER //
+CREATE PROCEDURE InsertBakeryOrder(IN order_id INT, IN customer_name VARCHAR(50), IN order_amount DECIMAL(10, 2))
+BEGIN
+    INSERT INTO BakeryOrders (OrderID, CustomerName, OrderAmount)
+    VALUES (order_id, customer_name, order_amount);
+END//
+DELIMITER ;
+```
+### Explanation:
+
+We define a stored procedure named InsertBakeryOrder that accepts three IN parameters: order_id (INT), customer_name (VARCHAR), and order_amount (DECIMAL).
+Inside the procedure, we use an INSERT INTO statement to insert the provided values into the BakeryOrders table.
